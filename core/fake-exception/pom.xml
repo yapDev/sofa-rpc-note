@@ -2,26 +2,40 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
     <parent>
+        <artifactId>sofa-rpc-core</artifactId>
         <groupId>com.alipay.sofa</groupId>
-        <artifactId>sofa-rpc-parent</artifactId>
         <version>5.4.8</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sofa-rpc-core</artifactId>
-    <packaging>pom</packaging>
-    
-    <modules>
-        <module>common</module>
-        <module>exception</module>
-        <module>api</module>
-        <module>fake-exception</module>
-        <module>fake-common</module>
-    </modules>
+    <groupId>fake.me.sofa</groupId>
+    <artifactId>sofa-rpc-fake-exception</artifactId>
+
+    <!-- module name 是一回事， artifactId 是另一回事 -->
 
     <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/**</include>
+                </includes>
+            </resource>
+        </resources>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/**</include>
+                </includes>
+            </testResource>
+        </testResources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -61,4 +75,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>
