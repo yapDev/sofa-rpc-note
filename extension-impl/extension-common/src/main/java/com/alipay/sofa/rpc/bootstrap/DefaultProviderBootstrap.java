@@ -16,6 +16,14 @@
  */
 package com.alipay.sofa.rpc.bootstrap;
 
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.alipay.sofa.rpc.common.struct.NamedThreadFactory;
 import com.alipay.sofa.rpc.common.utils.CommonUtils;
 import com.alipay.sofa.rpc.common.utils.ExceptionUtils;
@@ -34,14 +42,6 @@ import com.alipay.sofa.rpc.registry.Registry;
 import com.alipay.sofa.rpc.registry.RegistryFactory;
 import com.alipay.sofa.rpc.server.ProviderProxyInvoker;
 import com.alipay.sofa.rpc.server.Server;
-
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Default provider bootstrap.
@@ -107,7 +107,7 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
     }
 
     private void doExport() {
-        if (exported) {
+        if (exported) {     // 通过原子类型，保证注册1次
             return;
         }
 
@@ -118,11 +118,11 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
 
         //key  is the protocol of server,for concurrent safe
         Map<String, Boolean> hasExportedInCurrent = new ConcurrentHashMap<String, Boolean>();
-        // 将处理器注册到server
+        // 将处理器注册到server，多个服务就轮一遍
         List<ServerConfig> serverConfigs = providerConfig.getServer();
         for (ServerConfig serverConfig : serverConfigs) {
             String protocol = serverConfig.getProtocol();
-
+            // 有ID 来标示这个服务
             String key = providerConfig.buildKey() + ":" + protocol;
 
             if (LOGGER.isInfoEnabled(appName)) {
@@ -135,7 +135,7 @@ public class DefaultProviderBootstrap<T> extends ProviderBootstrap<T> {
                 cnt = CommonUtils.putToConcurrentMap(EXPORTED_KEYS, key, new AtomicInteger(0));
             }
             int c = cnt.incrementAndGet();
-            hasExportedInCurrent.put(serverConfig.getProtocol(), true);
+            hasExportedInCurrent.put(serverConfig.getProtocol(), true); // 发布完成。 话说，发布两次后覆盖前一个也没有问题吧
             int maxProxyCount = providerConfig.getRepeatedExportLimit();
             if (maxProxyCount > 0) {
                 if (c > maxProxyCount) {

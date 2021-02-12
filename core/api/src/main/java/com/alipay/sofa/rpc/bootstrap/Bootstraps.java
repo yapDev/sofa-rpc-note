@@ -43,9 +43,11 @@ public class Bootstraps {
         String bootstrap = providerConfig.getBootstrap();
         if (StringUtils.isEmpty(bootstrap)) {
             // Use default provider bootstrap
+            // 内容 定义在Json中
             bootstrap = RpcConfigs.getStringValue(RpcOptions.DEFAULT_PROVIDER_BOOTSTRAP);
             providerConfig.setBootstrap(bootstrap);
         }
+        // 看来是通过类加载机制来支持的扩展，不是SPI。 通过 @Extension("sofa") 将其串起来。 sofa -> DefaultProviderBootstrap
         ProviderBootstrap providerBootstrap = ExtensionLoaderFactory.getExtensionLoader(ProviderBootstrap.class)
             .getExtension(bootstrap, new Class[] { ProviderConfig.class }, new Object[] { providerConfig });
         return (ProviderBootstrap<T>) providerBootstrap;

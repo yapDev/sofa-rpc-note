@@ -24,7 +24,7 @@ import com.alipay.sofa.rpc.invoke.Invoker;
 
 /**
  * Server SPI
- *
+ * Server 竟然是一个接口，没有想到
  * @author <a href=mailto:zhanggeng.zg@antfin.com>GengZhang</a>
  */
 @Extensible(singleton = false)

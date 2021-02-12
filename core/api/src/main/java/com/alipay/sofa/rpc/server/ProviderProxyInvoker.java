@@ -26,7 +26,7 @@ import com.alipay.sofa.rpc.invoke.Invoker;
 
 /**
  * 服务端调用链入口
- *
+ * 这个类的作用是负责处理 ProviderInvoker 之上的调用链吧
  * @author <a href=mailto:zhanggeng.zg@antfin.com>GengZhang</a>
  */
 public class ProviderProxyInvoker implements Invoker {

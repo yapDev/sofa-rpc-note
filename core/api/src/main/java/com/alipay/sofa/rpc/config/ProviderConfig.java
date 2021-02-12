@@ -16,21 +16,6 @@
  */
 package com.alipay.sofa.rpc.config;
 
-import com.alipay.sofa.rpc.bootstrap.Bootstraps;
-import com.alipay.sofa.rpc.bootstrap.ProviderBootstrap;
-import com.alipay.sofa.rpc.common.utils.ClassUtils;
-import com.alipay.sofa.rpc.common.utils.CommonUtils;
-import com.alipay.sofa.rpc.common.utils.ExceptionUtils;
-import com.alipay.sofa.rpc.common.utils.StringUtils;
-import com.alipay.sofa.rpc.core.exception.SofaRpcRuntimeException;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ThreadPoolExecutor;
-
 import static com.alipay.sofa.rpc.common.RpcConfigs.getBooleanValue;
 import static com.alipay.sofa.rpc.common.RpcConfigs.getIntValue;
 import static com.alipay.sofa.rpc.common.RpcConfigs.getStringValue;
@@ -43,6 +28,21 @@ import static com.alipay.sofa.rpc.common.RpcOptions.PROVIDER_INVOKE_TIMEOUT;
 import static com.alipay.sofa.rpc.common.RpcOptions.PROVIDER_PRIORITY;
 import static com.alipay.sofa.rpc.common.RpcOptions.PROVIDER_REPEATED_EXPORT_LIMIT;
 import static com.alipay.sofa.rpc.common.RpcOptions.PROVIDER_WEIGHT;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadPoolExecutor;
+
+import com.alipay.sofa.rpc.bootstrap.Bootstraps;
+import com.alipay.sofa.rpc.bootstrap.ProviderBootstrap;
+import com.alipay.sofa.rpc.common.utils.ClassUtils;
+import com.alipay.sofa.rpc.common.utils.CommonUtils;
+import com.alipay.sofa.rpc.common.utils.ExceptionUtils;
+import com.alipay.sofa.rpc.common.utils.StringUtils;
+import com.alipay.sofa.rpc.core.exception.SofaRpcRuntimeException;
 
 /**
  * 服务提供者配置
@@ -127,7 +127,7 @@ public class ProviderConfig<T> extends AbstractInterfaceConfig<T, ProviderConfig
 
     /**
      * 同一个服务（接口协议uniqueId相同）的最大发布次数，防止由于代码bug导致重复发布。注意：后面的发布可能会覆盖前面的实现，-1表示不检查
-     *
+     * 这里会有什么坑吗？
      * @since 5.2.0
      */
     protected int                                                   repeatedExportLimit = getIntValue(PROVIDER_REPEATED_EXPORT_LIMIT);
